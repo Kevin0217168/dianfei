@@ -1,0 +1,44 @@
+# ================= 环境变量 / 凭据(最重要) =================
+# 任意层级的 .env 一律忽略,避免 token / 密码进入版本库
+.env
+.env.*
+*.env
+# 模板文件例外:可以提交,但内容必须是占位符,严禁含真实凭据
+!.env.example
+!*.env.example
+
+# ================= Python =================
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+.venv/
+venv/
+ENV/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ================= Node / 前端 =================
+node_modules/
+frontend/dist/
+.vite/
+
+# ================= 数据 / 运行产物 =================
+/data/
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+*.log
+logs/
+
+# ================= 编辑器 / 系统 =================
+.DS_Store
+Thumbs.db
+.idea/
+*.swp
+*~
