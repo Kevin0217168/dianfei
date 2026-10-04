@@ -17,10 +17,19 @@ function todayStr() {
   const d = new Date()
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
 }
+function currentMonthStr() {
+  const d = new Date()
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
+}
 const day = ref(todayStr()) // 每小时视图查看的历史日期
 
 function onDayChange(e) {
   day.value = e.target.value || todayStr()
+}
+const month = ref(currentMonthStr())
+
+function onMonthChange(e) {
+  month.value = e.target.value || currentMonthStr()
 }
 
 async function loadSummary() {
@@ -79,8 +88,13 @@ onMounted(() => {
         <input id="history-day" type="date" :value="day" :max="todayStr()" @change="onDayChange" />
         <button class="today-btn" @click="day = todayStr()">今天</button>
       </div>
-      <UsageChart :period="period" :price="price" :refresh-tick="refreshTick" :day="day" />
-      <UsageTable :period="period" :price="price" :refresh-tick="refreshTick" :day="day" />
+      <div v-if="period === 'daily'" class="day-picker">
+        <label for="history-month">查看月份</label>
+        <input id="history-month" type="month" :value="month" :max="currentMonthStr()" @change="onMonthChange" />
+        <button class="today-btn" @click="month = currentMonthStr()">本月</button>
+      </div>
+      <UsageChart :period="period" :price="price" :refresh-tick="refreshTick" :day="day" :month="month" />
+      <UsageTable :period="period" :price="price" :refresh-tick="refreshTick" :day="day" :month="month" />
     </div>
   </div>
 </template>
@@ -93,7 +107,7 @@ onMounted(() => {
 .seg button { border: none; background: transparent; padding: 6px 14px; cursor: pointer; font-size: 13px; color: #606266; border-radius: 6px; }
 .seg button.active { background: #fff; color: #409eff; box-shadow: 0 1px 3px rgba(0,0,0,.1); }
 .day-picker { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; font-size: 13px; color: #606266; }
-.day-picker input[type="date"] { padding: 5px 8px; border: 1px solid #dcdfe6; border-radius: 6px; font-size: 13px; color: #303133; background: #fff; }
+.day-picker input[type="date"], .day-picker input[type="month"] { padding: 5px 8px; border: 1px solid #dcdfe6; border-radius: 6px; font-size: 13px; color: #303133; background: #fff; }
 .today-btn { border: none; background: #f0f2f5; color: #606266; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; }
 .today-btn:hover { background: #e4e7ed; }
 .toolbar { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }

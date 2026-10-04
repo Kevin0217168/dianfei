@@ -6,7 +6,8 @@ const props = defineProps({
   period: { type: String, default: 'daily' },
   price: { type: Number, default: 0.56 },
   refreshTick: { type: Number, default: 0 },
-  day: { type: String, default: '' } // 每小时视图查看的历史日期(YYYY-MM-DD), 空则取今天
+  day: { type: String, default: '' }, // 每小时视图查看的历史日期(YYYY-MM-DD), 空则取今天
+  month: { type: String, default: '' }
 })
 
 const rows = ref([])
@@ -26,7 +27,7 @@ async function load() {
   let url = ''
   const day = props.day || nowParam().day
   if (props.period === 'hourly') url = `/usage/hourly?day=${day}`
-  else if (props.period === 'daily') url = `/usage/daily?month=${nowParam().month}`
+  else if (props.period === 'daily') url = `/usage/daily?month=${props.month || nowParam().month}`
   else url = '/usage/monthly'
 
   loading.value = true
@@ -48,6 +49,7 @@ function keyLabel(row) {
 onMounted(load)
 watch(() => props.period, load)
 watch(() => props.day, load)
+watch(() => props.month, load)
 watch(() => props.refreshTick, load)
 </script>
 
